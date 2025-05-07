@@ -1,115 +1,151 @@
-import Image from "next/image";
-import localFont from "next/font/local";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import Link from 'next/link';
+import FloatingHearts from '../components/FloatingHearts';
+import { useEffect, useState } from 'react';
+import { differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds } from 'date-fns';
 
 export default function Home() {
-  return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+  const [isActive, setIsActive] = useState(false);
+  const targetDate = new Date('2025-05-10T00:01:00-04:00'); // NYC time
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  useEffect(() => {
+    const updateCountdown = () => {
+      const now = new Date();
+      if (now >= targetDate) {
+        setIsActive(true);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      } else {
+        const days = differenceInDays(targetDate, now);
+        const hours = differenceInHours(targetDate, now) % 24;
+        const minutes = differenceInMinutes(targetDate, now) % 60;
+        const seconds = differenceInSeconds(targetDate, now) % 60;
+        setTimeLeft({ days, hours, minutes, seconds });
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const CountdownBox = ({ value, label, emoji }: { value: number; label: string; emoji: string }) => (
+    <div className="flex flex-col items-center mx-2">
+      <div className="text-3xl font-bold bg-white/90 rounded-lg px-4 py-2 shadow-lg text-black">
+        {value.toString().padStart(2, '0')}
+      </div>
+      <div className="text-sm mt-1 text-gray-800 font-medium">
+        {label} {emoji}
+      </div>
     </div>
+  );
+
+  return (
+    <main className="relative flex flex-col items-center justify-center h-screen text-center p-8 overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-red-100 via-yellow-50 to-green-100 animate-gradientMove" />
+
+      {/* Floating hearts component */}
+      <FloatingHearts />
+
+      {/* Extra hearts layer */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {Array.from({ length: 30 }).map((_, i) => (
+          <span
+            key={i}
+            className="absolute w-4 h-4 bg-green-400 rounded-full opacity-60 animate-heartFloat"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${8 + Math.random() * 4}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <h1 className={`text-5xl font-extrabold z-10 text-gray-900 mb-4 drop-shadow-md transition-all duration-1000 ${!isActive ? 'blur-md' : 'blur-0'}`}>
+        Happy Anniversary, Annick ❤️
+      </h1>
+
+      <p className={`mt-2 text-2xl z-10 text-gray-700 max-w-xl transition-all duration-1000 ${!isActive ? 'blur-md' : 'blur-0'}`}>
+        One year of love, laughs, and Hozier on repeat.
+      </p>
+
+      <div className="mt-6 z-10">
+        <div className="text-xl text-gray-700 mb-4">
+          {!isActive ? 'Our anniversary starts in:' : 'Ready to begin! 🎉'}
+        </div>
+        {!isActive && (
+          <div className="flex justify-center items-center">
+            <CountdownBox value={timeLeft.days} label="Days" emoji="📅" />
+            <CountdownBox value={timeLeft.hours} label="Hours" emoji="⏰" />
+            <CountdownBox value={timeLeft.minutes} label="Minutes" emoji="⌛" />
+            <CountdownBox value={timeLeft.seconds} label="Seconds" emoji="✨" />
+          </div>
+        )}
+      </div>
+
+      {isActive ? (
+        <Link 
+          href="/wrapped"
+          className="mt-10 px-10 py-4 rounded-xl text-lg font-semibold transition shadow-xl z-10
+                     bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 text-gray-900
+                     hover:from-yellow-500 hover:to-yellow-600"
+        >
+          Start
+        </Link>
+      ) : (
+        <button
+          className="mt-10 px-10 py-4 rounded-xl text-lg font-semibold transition shadow-xl z-10
+                     bg-gray-300 text-gray-500 cursor-not-allowed"
+          disabled
+        >
+          Start
+        </button>
+      )}
+
+      <style jsx>{`
+        @keyframes gradientMove {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .animate-gradientMove {
+          background-size: 200% 200%;
+          animation: gradientMove 15s ease infinite;
+        }
+
+        @keyframes heartFloat {
+          0% {
+            transform: translateY(0) scale(1);
+            opacity: 0.4;
+          }
+          50% {
+            transform: translateY(-30px) scale(1.1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.4;
+          }
+        }
+
+        .animate-heartFloat {
+          animation: heartFloat ease-in-out infinite;
+        }
+      `}</style>
+    </main>
   );
 }
