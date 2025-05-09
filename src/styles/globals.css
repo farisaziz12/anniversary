@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gradient-to-br from-gold via-red to-green text-white font-sans;
+  @apply bg-gradient-to-br from-amber-400 via-red-500 to-green-500 text-white font-sans;
 }
 
 @keyframes pulseSlow {

@@ -9,6 +9,7 @@ export default function LoveTimer() {
   const [showResult, setShowResult] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [hint, setHint] = useState('');
+  const [guessesLeft, setGuessesLeft] = useState(3);
   const router = useRouter();
   
   const actualDays = 184; // 184 days
@@ -16,14 +17,13 @@ export default function LoveTimer() {
 
   useEffect(() => {
     if (showResult) {
-      const difference = Math.abs(Number(guess) - actualDays);
-      if (difference > 30) {
+      if (guessesLeft === 1) {
         setHint("Hint: It was more than 5 months...");
-      } else if (difference > 15) {
-        setHint("Hint: You&apos;re getting warmer! Think about autumn...");
+      } else if (guessesLeft === 2) {
+        setHint("Hint: You're getting warmer! Think about autumn...");
       }
     }
-  }, [showResult, guess]);
+  }, [showResult, guessesLeft]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +31,7 @@ export default function LoveTimer() {
     setTimeout(() => {
       setShowResult(true);
       setIsAnimating(false);
+      setGuessesLeft(prev => prev - 1);
     }, 1000);
   };
 
@@ -38,20 +39,20 @@ export default function LoveTimer() {
     const difference = Math.abs(Number(guess) - actualDays);
     if (difference === 0) {
       return {
-        message: "Perfect guess! You know yourself so well! 💖",
-        emoji: "💖",
+        message: "Perfect guess! You know yourself so well! 🩶",
+        emoji: "🩶",
         color: "text-[#4CAF50]"
       };
     } else if (difference <= 5) {
       return {
-        message: "So close! You&apos;re amazing! 💕",
-        emoji: "💕",
-        color: "text-[#E91E63]"
+        message: "So close! You're amazing! 🩶",
+        emoji: "🩶",
+        color: "text-[#d59b37]"
       };
     } else {
       return {
-        message: "Not quite! But that's okay, the important thing is you said it! 💝",
-        emoji: "💝",
+        message: guessesLeft > 0 ? "Not quite! Try again! 🩶" : "Game Over! The answer was 184 days! 🩶",
+        emoji: "🩶",
         color: "text-[#F44336]"
       };
     }
@@ -126,17 +127,21 @@ export default function LoveTimer() {
                   required
                   min="1"
                   max="365"
+                  disabled={guessesLeft === 0}
                 />
                 <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400">days</span>
               </motion.div>
+              <div className="text-gray-300 mb-4">
+                Guesses left: {guessesLeft}
+              </div>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 type="submit"
-                disabled={isAnimating}
+                disabled={isAnimating || guessesLeft === 0}
                 className="w-full px-6 py-4 bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-gray-900 rounded-xl shadow-lg hover:from-[#DAA520] hover:to-[#B8860B] transition font-bold text-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isAnimating ? "Calculating..." : "Check Your Guess"}
+                {isAnimating ? "Calculating..." : guessesLeft === 0 ? "No More Guesses" : "Check Your Guess"}
               </motion.button>
             </motion.form>
           ) : (
@@ -159,15 +164,23 @@ export default function LoveTimer() {
                 {feedback.message}
               </p>
               <div className="space-y-2">
-                <p className="text-xl text-gray-300 font-medium">
-                  It took you {actualDays} days to tell me you loved me! 💘
-                </p>
-                <p className="text-lg text-[#B8860B]">
-                  That's {formatNumber(actualMinutes)} minutes of waiting! ⏳
-                </p>
-                <p className="text-sm text-gray-400">
-                  From May 10th to November 11th, 2024
-                </p>
+                {guessesLeft === 0 || Number(guess) === actualDays ? (
+                  <>
+                    <p className="text-xl text-gray-300 font-medium">
+                      It took you {actualDays} days to tell me you loved me! 🩶
+                    </p>
+                    <p className="text-lg text-[#B8860B]">
+                      That's {formatNumber(actualMinutes)} minutes of waiting! ⏳
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      From May 10th to November 11th, 2024
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-xl text-gray-300 font-medium">
+                    {guessesLeft} {guessesLeft === 1 ? 'guess' : 'guesses'} left! Keep trying! 🩶
+                  </p>
+                )}
               </div>
               {hint && (
                 <motion.p
@@ -179,18 +192,33 @@ export default function LoveTimer() {
                   {hint}
                 </motion.p>
               )}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => {
-                  setShowResult(false);
-                  setGuess('');
-                  setHint('');
-                }}
-                className="w-full px-8 py-4 bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-gray-900 rounded-xl shadow-lg hover:from-[#DAA520] hover:to-[#B8860B] transition font-bold text-lg cursor-pointer"
-              >
-                Try Again
-              </motion.button>
+              {(guessesLeft === 0 || Number(guess) === actualDays) && (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => router.push({
+                    pathname: "/wrapped",
+                    query: { section: 2 }
+                  })}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-gray-900 rounded-xl shadow-lg hover:from-[#DAA520] hover:to-[#B8860B] transition font-bold text-lg cursor-pointer mt-4"
+                >
+                  Continue to Next Section
+                </motion.button>
+              )}
+              {guessesLeft > 0 && Number(guess) !== actualDays && (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setShowResult(false);
+                    setGuess('');
+                    setHint('');
+                  }}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-[#B8860B] to-[#DAA520] text-gray-900 rounded-xl shadow-lg hover:from-[#DAA520] hover:to-[#B8860B] transition font-bold text-lg cursor-pointer"
+                >
+                  Try Again
+                </motion.button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

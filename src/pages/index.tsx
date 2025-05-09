@@ -54,18 +54,6 @@ export default function Home() {
 
       {/* Extra hearts layer */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <span
-            key={i}
-            className="absolute w-4 h-4 bg-green-400 rounded-full opacity-60 animate-heartFloat"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 10}s`,
-              animationDuration: `${8 + Math.random() * 4}s`,
-            }}
-          />
-        ))}
       </div>
 
       <h1 className={`text-5xl font-extrabold z-10 text-gray-900 mb-4 drop-shadow-md transition-all duration-1000 ${!isActive ? 'blur-md' : 'blur-0'}`}>
@@ -125,25 +113,6 @@ export default function Home() {
         .animate-gradientMove {
           background-size: 200% 200%;
           animation: gradientMove 15s ease infinite;
-        }
-
-        @keyframes heartFloat {
-          0% {
-            transform: translateY(0) scale(1);
-            opacity: 0.4;
-          }
-          50% {
-            transform: translateY(-30px) scale(1.1);
-            opacity: 0.8;
-          }
-          100% {
-            transform: translateY(0) scale(1);
-            opacity: 0.4;
-          }
-        }
-
-        .animate-heartFloat {
-          animation: heartFloat ease-in-out infinite;
         }
       `}</style>
     </main>

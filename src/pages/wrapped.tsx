@@ -35,21 +35,14 @@ const sections: Section[] = [
     color: "bg-[#1a1a1a]",
     type: "colors",
     colors: [
-      { name: "Shiny Gold", hex: "#B8860B", description: "Like the warmth of our love", emoji: "💛" },
-      { name: "Deep Red", hex: "#D7263D", description: "The passion in our hearts", emoji: "❤️" },
-      { name: "Deep Green", hex: "#3A7D44", description: "The growth of our journey", emoji: "💚" }
+      { name: "Gold", hex: "#B8860B", description: "Like the warmth of our love", emoji: "💛" },
+      { name: "Red", hex: "#D7263D", description: "The passion in our hearts", emoji: "❤️" },
+      { name: "Green", hex: "#3A7D44", description: "The our favorite couch 🥰", emoji: "💚" }
     ]
   },
   {
-    title: "Our Photo Gallery",
-    description: "Captured moments of our beautiful journey",
-    color: "bg-[#1a1a1a]",
-    type: "gallery",
-    link: "/gallery"
-  },
-  {
     title: "The Love Timer",
-    description: "How long did it take for me to say those three magical words?",
+    description: "How long did it take for you to say those three magical words?",
     color: "bg-[#1a1a1a]",
     type: "love-timer",
     link: "/love-timer"
@@ -62,13 +55,6 @@ const sections: Section[] = [
     link: "/poems"
   },
   {
-    title: "A Letter For You",
-    description: "Words from my heart to yours",
-    color: "bg-[#1a1a1a]",
-    type: "love-letter",
-    link: "/love-letter"
-  },
-  {
     title: "Our Year in Numbers",
     description: "The moments that made our year special",
     color: "bg-[#1a1a1a]",
@@ -77,14 +63,16 @@ const sections: Section[] = [
       { number: 3, label: "Trips to New York", emoji: "🗽" },
       { number: 2, label: "Swiss Adventures in Geneva", emoji: "🇨🇭" },
       { number: 3, label: "Relaxing Spa Days", emoji: "💆‍♀️" },
-      { number: 1000, label: "Milano Market Sandwiches", emoji: "🥪" },
-      { number: 10000, label: "FaceTime Minutes", emoji: "📱" }
+      { number: 30, label: "~ Milano Market Sandwiches", emoji: "🥪" },
+      { number: 65700, label: "~ FaceTime Minutes (3h × 365 days)", emoji: "📱" }
     ],
     anecdotes: [
-      { text: "That time we got lost in Central Park but found the perfect spot for coffee", emoji: "🌳" },
-      { text: "Our first Swiss chocolate tasting adventure in Geneva", emoji: "🍫" },
-      { text: "The countless lunch breaks at Milano Market, always trying new sandwich combinations", emoji: "🥖" },
-      { text: "Late night FaceTime calls that turned into early morning conversations", emoji: "✨" }
+      { text: "That magical New York trip that unexpectedly became the start of our forever", emoji: "✨" },
+      { text: "All those comedy shows where we couldn't stop laughing together", emoji: "🎭" },
+      { text: "The countless FaceTime calls that made the distance feel like nothing", emoji: "💕" },
+      { text: "Every heavy conversation that only made us stronger and closer", emoji: "💪" },
+      { text: "The way you light up when talking about me to your friends", emoji: "🌟" },
+      { text: "Our relaxing spa days, building tension and memories together", emoji: "💆‍♀️" }
     ]
   }
 ];
